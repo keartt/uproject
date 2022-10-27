@@ -7,8 +7,10 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+
+import javax.persistence.*;
 
 @Entity // DB 가 해당 객체를 인식 가능하게
 @AllArgsConstructor
@@ -17,9 +19,9 @@ import javax.persistence.Id;
 @Getter
 public class Article {
 
-    @Id // 대표값을 지정
-    @GeneratedValue // 자동 생성 어노테이션
-    private  Long id; // 대표값을 넣어줘야 함
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동 생성 전략
+    private Long id;
 
     @Column
     private String title;
@@ -27,26 +29,4 @@ public class Article {
     @Column
     private String content;
 
-
-
-//   > @NoArgsConstructor
-//    public Article(){
-//    }
-
-//  > @AllArgsConstructor
-//    public Article(Long id, String title, String content) {
-//        this.id = id;
-//        this.title = title;
-//        this.content = content;
-//    }
-
-//    > @ToString
-//    @Override
-//    public String toString() {
-//        return "Article{" +
-//                "id=" + id +
-//                ", title='" + title + '\'' +
-//                ", content='" + content + '\'' +
-//                '}';
-//    }
 }

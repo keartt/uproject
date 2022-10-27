@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -106,4 +107,26 @@ public class ArticleController {
         //3. 수정 결과 페이지로 redirect
         return "redirect:/articles/" + articleEntity.getId();
     }
+
+    @GetMapping("/articles/{id}/delete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr){
+                                               // 모델 대신 Redirect... 변수명으로 선언_ 삭제 메시지
+        log.info("삭제 요청이 들어옴");
+
+        //1. 삭제 대상을 가져온다.
+        Article target = articleRepository.findById(id).orElse(null);
+        log.info(target.toString());
+
+        //2. 대상을 삭제한다.
+        if (target != null){
+            articleRepository.delete(target);
+            rttr.addFlashAttribute("msg","Delete complete");
+            // addFlash... 휘발성 데이터로 msg 에 삭제 메시지 담기
+            // header 파일에 msg 가 있을경우 {{#msg}} 를 조건으로 코드 추가
+        }
+
+        //3. 결과페이지로 리다이렉트
+        return "redirect:/articles/";
+    }
+
 }
