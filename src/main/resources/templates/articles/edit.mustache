@@ -1,0 +1,19 @@
+{{>layouts/header}}
+
+{{#article}}
+<form class="container" action="/articles/update" method="post">
+    <input name="id" type="hidden" value="{{id}}" /> <!-- id 값을 숨겨서 받도록 > dto 에도 id 추가해야함  -->
+    <div class="mb-3">
+        <label class="form-label">제목</label>
+        <input type="text" class="form-control" name = "title" value="{{title}}"> <!-- 제목에 작성했던 제목 입력 -->
+    </div>
+    <div class="mb-3">
+        <label class="form-label">내용</label>
+        <textarea class="form-control" rows="3" name = "content" >{{content}}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/articles/{{id}}" class="btn btn-primary" > BACK </a>
+</form>
+{{/article}}
+
+{{>layouts/footer}}
