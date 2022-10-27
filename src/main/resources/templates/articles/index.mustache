@@ -1,0 +1,24 @@
+{{>layouts/header}}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{#articleList}}    <<!-- 해당 변수가 데이터의 묶음일 경우 내부를 반복 -->>
+    <tr>
+        <td>{{id}}</td>
+        <td>{{title}}</td>
+        <td>{{content}}</td>
+    </tr>
+    {{/articleList}}
+
+    </tbody>
+</table>
+
+{{>layouts/footer}}
