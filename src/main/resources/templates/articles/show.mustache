@@ -1,0 +1,24 @@
+{{>layouts/header}}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Title</th>
+        <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {{#article}}  <!-- 모델에 등록된 데이터 가져오는 타입 -->
+    <tr>
+        <td>{{id}}</td>
+        <td>{{title}}</td>
+        <td>{{content}}</td>
+    </tr>
+    {{/article}}  <!-- 변수 사용  범위 지정 -->
+
+    </tbody>
+</table>
+
+{{>layouts/footer}}

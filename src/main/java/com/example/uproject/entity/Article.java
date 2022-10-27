@@ -1,11 +1,18 @@
 package com.example.uproject.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity // DB 가 해당 ㄱ개체를 인식 가능하게
+@Entity // DB 가 해당 객체를 인식 가능하게
+@AllArgsConstructor
+@ToString
+@NoArgsConstructor // 디폴트 생성자 추가
 public class Article {
 
     @Id // 대표값을 지정
@@ -18,20 +25,24 @@ public class Article {
     @Column
     private String content;
 
-    public Article(){
-    }
-    public Article(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
+//   > @NoArgsConstructor
+//    public Article(){
+//    }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                '}';
-    }
+//  > @AllArgsConstructor
+//    public Article(Long id, String title, String content) {
+//        this.id = id;
+//        this.title = title;
+//        this.content = content;
+//    }
+
+//    > @ToString
+//    @Override
+//    public String toString() {
+//        return "Article{" +
+//                "id=" + id +
+//                ", title='" + title + '\'' +
+//                ", content='" + content + '\'' +
+//                '}';
+//    }
 }
