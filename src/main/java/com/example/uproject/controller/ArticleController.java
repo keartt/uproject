@@ -40,7 +40,9 @@ public class ArticleController {
         //System.out.println(saved.toString());
         log.info(saved.toString());
 
-        return "";
+        return "redirect:/articles/" + saved.getId();
+        // redirect 를 이용해 articles/new 에서 데이터 입력시 해당 데이터 아이디 페이지로 이동
+        // Articles 에 @GETTER 추가
     }
 
     //
