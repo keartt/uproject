@@ -20,10 +20,13 @@
 
     </tbody>
 </table>
-<a href="/articles" class="btn btn-primary" > ALL </a>  <!--articles 페이지로 링크 -->
+
+<a href="/articles" class="btn btn-primary" > List </a>  <!--articles 페이지로 링크 -->
 <a href="/articles/{{article.id}}/edit" class="btn btn-primary" > Edit </a>
 <a href="/articles/{{article.id}}/delete" class="btn btn-danger" > Delete </a>
 <!-- HTML 에서는 GET,POST 방식만 지원하기에 a태그를 이용해 링크 사용(get 방식) -->
 <a href="/articles/new" class="btn btn-primary"> New Article </a>  <!--  articles/new 페이지로 링크 -->
+
+{{>comments/_comments}}
 
 {{>layouts/footer}}

@@ -1,8 +1,11 @@
 package com.example.uproject.controller;
 
+import com.example.uproject.api.CommentApiController;
 import com.example.uproject.dto.ArticleForm;
+import com.example.uproject.dto.CommentDto;
 import com.example.uproject.entity.Article;
 import com.example.uproject.repository.ArticleRepository;
+import com.example.uproject.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,9 @@ public class ArticleController {
 
     @Autowired // 스프링 부트가 미리 생성해놓은 객체를 자동 연결
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentService commentService; // 댓글 리스트 mustache 파일 연동을 위해
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
@@ -53,9 +59,11 @@ public class ArticleController {
 
         //1 id로 데이터를 가져오고
         Article articleEntity = articleRepository.findById(id).orElse(null); // ENTITY에 id 값이 없으면 null 반환
+        List<CommentDto> commentDtos= commentService.comments(id); // 댓글 리스트 mustache 파일 연동을 위해
 
         //2 가져온 데이터를 모델에 등록하고
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentDtos", commentDtos); // 댓글 리스트 mustache 파일 연동을 위해
 
         //3 보여줄 페이지를 설정한다.
         return "articles/show";
