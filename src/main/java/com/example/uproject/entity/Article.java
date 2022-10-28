@@ -29,4 +29,10 @@ public class Article {
     @Column
     private String content;
 
+    public void patch(Article article){
+        if (article.title != null) // 제목이 있으면 넣는다.
+            this.title = article.title;
+        if (article.content != null) // 있으면 넣는다.
+            this.content = content;
+    }
 }
