@@ -3,6 +3,7 @@ package com.example.uproject.api;
 import com.example.uproject.dto.ArticleForm;
 import com.example.uproject.entity.Article;
 import com.example.uproject.repository.ArticleRepository;
+import com.example.uproject.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,65 +15,57 @@ import java.util.List;
 @Slf4j // log 활용
 @RestController // RestAPI 용 컨트롤러, 데이터 (JSON) 을 반환함
 public class ArticleApiController {
-
-    @Autowired //DI
-    private ArticleRepository articleRepository;
+    @Autowired // DI 생성 객체를 연결.. /sevice/ArticleService.java
+    private ArticleService articleService;
 
     // GET
     // 1. 목록반환
     @GetMapping("/api/articles")
     public List<Article> index() {
-        return articleRepository.findAll();
+        return articleService.index();
     }
-    // 2. 단일 반환
+
+    //    // 2. 단일 반환
     @GetMapping("/api/articles/{id}")
-    public Article index(@PathVariable Long id) {
-        return articleRepository.findById(id).orElse(null);
+    public Article show(@PathVariable Long id) {
+        return articleService.show(id);
     }
 
     // POST
-    @PostMapping("/api/articles/{id}")
-    public Article create(@RequestBody ArticleForm dto) { // 레스트 API 에서 제이슨으로 던질 때 필요
-        Article article  = dto.toEntity();
-        return articleRepository.save(article);
+    @PostMapping("/api/articles")
+    public ResponseEntity<Article> create(@RequestBody ArticleForm dto) { // 레스트 API 에서 제이슨으로 던질 때 필요
+        Article created = articleService.create(dto);
+        return (created != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(created) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
 
     // PATCH
     @PatchMapping("/api/articles/{id}")
     public ResponseEntity<Article> update(@PathVariable Long id, @RequestBody ArticleForm dto){
-    // 1. 수정용 entity 생성
-        Article article = dto.toEntity();
-        log.info("id : {}, article : {}", id, article.toString());
-    // 2. 대상 entity 조회
-        Article target = articleRepository.findById(id).orElse(null);
 
-    // 3. 잘못된 요청 처리 ( 대상이 null 이거나 id 가 다른 경우
-        if (target == null || id != article.getId()) {
-            // 400 응답 출력 >> 이를 위해 ResponseEntity<Article> 타입으로 담아서 보내야 함을 수정해줘야함?!
-            log.info("잘못된 요청  id : {}, article : {}", id, article.toString());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
-    // 4. 업데이트 & 정상응답
-        target.patch(article);
-        // 일부 값을 보내지 않으면 null 이 되는 현상 해결을 위해 기존값에 변경된 값만 붙이는 patch 코드 추가
-        // Entity (Article) 에 patch 메소드 추가
-        Article updated = articleRepository.save(target);
-        return ResponseEntity.status(HttpStatus.OK).body(updated);
+        Article updated = articleService.update(id, dto);
+        return (updated != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     // DELETE
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Article> delete(@PathVariable Long id){
-        //대상 찾기
-        Article target = articleRepository.findById(id).orElse(null);
-        // 잘못된 요청이 들어올 경우
-        if (target == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-        //대상 삭제
-        articleRepository.delete(target);
-        //데이터 반환
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        Article deleted = articleService.delete(id);
+        return (deleted != null) ?
+                ResponseEntity.status(HttpStatus.NO_CONTENT).build() :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    // 트랜잭션 > 실패 > 롤백
+    @PostMapping("/api/transaction-test")
+    public ResponseEntity<List<Article>> transactionTest(@RequestBody List<ArticleForm> dtos) {
+        List<Article> createdList = articleService.createArticles(dtos);
+        return (createdList != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(createdList) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }
